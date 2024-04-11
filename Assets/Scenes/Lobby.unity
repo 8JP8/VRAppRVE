@@ -4690,6 +4690,15 @@ MonoBehaviour:
   Difficulty_Dropdown: {fileID: 123068415}
   Velocity_Slider: {fileID: 1643639536}
   Timer_Mode_Toggle: {fileID: 1154963236}
+  skyboxMaterials:
+  - {fileID: 2100000, guid: 772ad0be85c6f6141be2871ae7e85bde, type: 2}
+  - {fileID: 2100000, guid: 42a230c08bc7e0c4eb5e1990f2f24ed8, type: 2}
+  - {fileID: 2100000, guid: b3e5e7fa8f722c84fa23970347c66241, type: 2}
+  - {fileID: 2100000, guid: 08894b629fa8dc848a7bffbe4d227ccf, type: 2}
+  - {fileID: 2100000, guid: 40035a61d8c1ef448a24ea27399adbd2, type: 2}
+  - {fileID: 2100000, guid: 8d4ebe1c1aa929d44a2fe3e8b9ca8f80, type: 2}
+  - {fileID: 2100000, guid: ffeaa81536b0f724c80ea2abc4d22dc7, type: 2}
+  - {fileID: 2100000, guid: 2bd1629c0bb162546a031f25a4ed20a4, type: 2}
 --- !u!1 &419629167
 GameObject:
   m_ObjectHideFlags: 0
