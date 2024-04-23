@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Text.RegularExpressions;
+using Unity.Android.Gradle;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 
@@ -27,6 +29,12 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public float fireCooldownDuration = 1f; // Cooldown duration for firing (in seconds)
     Animator animator;
 
+    public InputActionReference TriggerR;
+    public InputActionReference AimDirR;
+    bool ShootTriggerPressed;
+    bool ShootTriggerPressing;
+
+
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
@@ -49,7 +57,16 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     {
         CheckLooking();
 
-        CheckObjectRotation();
+        //Shoot
+        ShootTriggerPressed = (TriggerR.action.ReadValue<float>() > 0.5f) && !ShootTriggerPressing ? true : false;
+        ShootTriggerPressing = (TriggerR.action.ReadValue<float>() > 0.5f) ? true : false;
+
+        if (ShootTriggerPressed)
+        {
+            Fire();
+        }
+
+        //CheckObjectRotation();
 
         // Move the object along the spherical path and randomly change direction
         MoveObjectOnSphericalPath();
@@ -157,9 +174,9 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         if (XRSettings.isDeviceActive)
         {
             // Use XR input to determine if the user is looking at the cube
-            InputDevice device = InputDevices.GetDeviceAtXRNode(XRNode.Head);
-            device.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 headPosition);
-            device.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion headRotation);
+            UnityEngine.XR.InputDevice device = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+            device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.devicePosition, out Vector3 headPosition);
+            device.TryGetFeatureValue(UnityEngine.XR.CommonUsages.deviceRotation, out Quaternion headRotation);
 
             Vector3 forwardDirection = headRotation * Vector3.forward;
             Vector3 toCube = transform.position - headPosition;
@@ -209,7 +226,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
             if (transform.position.y < 0)
                 transform.position = new Vector3(transform.position.x, 0.000001f, transform.position.z);
 
-            // Move the cube in the current direction
+            // Move the object in the current direction
             transform.Translate(moveDirection * movementSpeed * Time.deltaTime, Space.World);
 
             // Ensure the cube stays on the surface of the sphere
@@ -222,6 +239,9 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
                 float radians = angle * Mathf.Deg2Rad;
                 moveDirection = new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0f);
             }
+
+            //Rotate the object
+            transform.Rotate(moveDirection);
 
             transform.position = newPosition;
 
