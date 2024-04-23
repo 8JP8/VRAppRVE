@@ -32,8 +32,12 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
     public InputActionReference TriggerR;
     public InputActionReference AimDirR;
-    bool ShootTriggerPressed;
-    bool ShootTriggerPressing;
+    public InputActionReference TriggerL;
+    public InputActionReference AimDirL;
+    bool ShootTriggerPressedR;
+    bool ShootTriggerPressingR;
+    bool ShootTriggerPressedL;
+    bool ShootTriggerPressingL;
 
 
     void Start()
@@ -58,11 +62,14 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     {
         CheckLooking();
 
-        //Shoot
-        ShootTriggerPressed = (TriggerR.action.ReadValue<float>() > 0.5f) && !ShootTriggerPressing ? true : false;
-        ShootTriggerPressing = (TriggerR.action.ReadValue<float>() > 0.5f) ? true : false;
+        //ShootR
+        ShootTriggerPressedR = (TriggerR.action.ReadValue<float>() > 0.5f) && !ShootTriggerPressingR ? true : false;
+        ShootTriggerPressingR = (TriggerR.action.ReadValue<float>() > 0.5f) ? true : false;
+        //ShootL
+        ShootTriggerPressedL = (TriggerL.action.ReadValue<float>() > 0.5f) && !ShootTriggerPressingL ? true : false;
+        ShootTriggerPressingL = (TriggerL.action.ReadValue<float>() > 0.5f) ? true : false;
 
-        if (ShootTriggerPressed)
+        if (ShootTriggerPressedR || ShootTriggerPressedL)
         {
             Fire();
         }
