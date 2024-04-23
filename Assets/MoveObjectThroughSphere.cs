@@ -27,6 +27,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     private bool isHoveringTheObject = false;
     private bool isResetting = false;
     public float fireCooldownDuration = 1f; // Cooldown duration for firing (in seconds)
+    public float rotationSpeed = 1f;
     Animator animator;
 
     public InputActionReference TriggerR;
@@ -215,14 +216,13 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         }
     }
 
-    
+
     // Move the cube through the spherical path
     void MoveObjectOnSphericalPath()
     {
         if (triggered)
         {
             // Set the rotation of the cube to (0, 0, 0) and the position positive
-            transform.rotation = Quaternion.identity;
             if (transform.position.y < 0)
                 transform.position = new Vector3(transform.position.x, 0.000001f, transform.position.z);
 
@@ -240,21 +240,28 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
                 moveDirection = new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0f);
             }
 
-            //Rotate the object
-            transform.Rotate(moveDirection);
-
             transform.position = newPosition;
+
 
             // Check if it's time to change direction
             if (Time.time >= nextDirectionChangeTime)
             {
                 // Change direction
                 ChangeDirection();
+
                 // Set the next time for direction change
                 nextDirectionChangeTime = Time.time + Random.Range(minChangeDirectionInterval, maxChangeDirectionInterval);
+
+                // Ensure the direction vector is not zero to avoid errors
+                if (moveDirection != Vector3.zero)
+                {
+                    // Create a rotation that looks along the movement direction
+                    transform.rotation = Quaternion.LookRotation(moveDirection);
+                }
             }
         }
     }
+
 
     // Change the movement direction to a random direction
     void ChangeDirection()
@@ -265,7 +272,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     Vector3 GetRandomPoint()
     {
         // Generate random point in a unit sphere
-        Vector3 randomDirection = Random.insideUnitSphere;
+        Vector3 randomDirection = Random.onUnitSphere.normalized;
 
         // Scale the random point to the sphere's radius
         Vector3 randomPoint = randomDirection * sphereRadius;

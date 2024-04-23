@@ -439,12 +439,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookThreshold: 300
   triggertime: 1
-  movementSpeed: 0.1
-  minChangeDirectionInterval: 1
-  maxChangeDirectionInterval: 2
+  movementSpeed: 1
+  minChangeDirectionInterval: 0
+  maxChangeDirectionInterval: 5
   minAngle: 30
   maxAngle: 150
   fireCooldownDuration: 1
+  rotationSpeed: 1
   TriggerR: {fileID: -6395602842196007441, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
   AimDirR: {fileID: -3870559572202308136, guid: c348712bda248c246b8c49b3db54643f,
@@ -487,18 +488,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &18037445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 18037435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03721e5839d6a9242ab2ed1cd2788494, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &18037447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3288,10 +3277,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 18037444}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b70f159e6c034f94a88a0893d50a01cf,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 18037445}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b70f159e6c034f94a88a0893d50a01cf,
         type: 3}
       insertIndex: -1
