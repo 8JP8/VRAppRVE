@@ -245,6 +245,13 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
                 float angle = Random.Range(minAngle, maxAngle);
                 float radians = angle * Mathf.Deg2Rad;
                 moveDirection = new Vector3(Mathf.Sin(radians), Mathf.Cos(radians), 0f);
+
+                // Ensure the direction vector is not zero to avoid errors
+                if (moveDirection != Vector3.zero)
+                {
+                    // Create a rotation that looks along the movement direction
+                    transform.rotation = Quaternion.LookRotation(moveDirection);
+                }
             }
 
             transform.position = newPosition;
