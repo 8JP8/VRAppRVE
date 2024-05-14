@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
+using TMPro;
 
 public class RandomMovementOnSphericalSurface : MonoBehaviour
 {
@@ -16,10 +17,12 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public float maxChangeDirectionInterval = 4f; // Maximum time between direction changes
     public float minAngle = 30f; // Minimum angle for upward direction (degrees)
     public float maxAngle = 150f; // Maximum angle for upward direction (degrees)
+    public TextMeshProUGUI Score_Label;
 
     private bool isLooking = false;
     private bool triggered = false;
     private float lookTimeElapsed = 0f;
+    private float Score = 0;
     private Vector3 moveDirection; // Current movement direction
     private float nextDirectionChangeTime; // Time for next direction change
     private int difficultyvalue;
@@ -88,6 +91,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         // If not in cooldown, register hit and start cooldown
         if (!isFireCooldown && isHoveringTheObject)
         {
+            Score += 1;
+            Score_Label.text = Score.ToString();
             ResetObject();
         }
         // Start cooldown
@@ -298,8 +303,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
             randomPoint.y = Mathf.Abs(randomPoint.y) + 0.0001f;
         }
 
-        return randomPoint;
-    }
+        return randomPoint;   }
 
     public void StartFlight() { animator.SetTrigger("TakeOffTrigger"); animator.ResetTrigger("LookAroundTrigger"); animator.ResetTrigger("IdleTrigger"); }
     public void LookAroundLoop() { animator.SetTrigger("LookAroundTrigger"); animator.ResetTrigger("TakeOffTrigger"); animator.ResetTrigger("IdleTrigger"); }
