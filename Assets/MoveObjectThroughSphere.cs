@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Text.RegularExpressions;
-using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
