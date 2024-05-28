@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using TMPro;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class RandomMovementOnSphericalSurface : MonoBehaviour
 {
@@ -41,10 +42,17 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     bool ShootTriggerPressedL;
     bool ShootTriggerPressingL;
 
+    private XRGrabInteractable grabInteractable;
 
     void Start()
     {
         animator = gameObject.GetComponent<Animator>();
+        grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
+
+        // Add event listeners for grab events
+        grabInteractable.selectEntered.AddListener(OnSelectEntered);
+        grabInteractable.selectExited.AddListener(OnSelectExited);
+
         // Initialize a random movement direction
         moveDirection = Random.onUnitSphere.normalized;
         // Set the initial time for the next direction change
@@ -56,9 +64,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         if (difficultyvalue == 0) sphereRadius = 10f;
         else if (difficultyvalue == 1) sphereRadius = 20f;
         else {sphereRadius = 25f;}
-
     }
-
 
     void Update()
     {
@@ -280,7 +286,6 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         }
     }
 
-
     // Change the movement direction to a random direction
     void ChangeDirection()
     {
@@ -302,9 +307,20 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
             randomPoint.y = Mathf.Abs(randomPoint.y) + 0.0001f;
         }
 
-        return randomPoint;   }
+        return randomPoint;
+    }
 
     public void StartFlight() { animator.SetTrigger("TakeOffTrigger"); animator.ResetTrigger("LookAroundTrigger"); animator.ResetTrigger("IdleTrigger"); }
     public void LookAroundLoop() { animator.SetTrigger("LookAroundTrigger"); animator.ResetTrigger("TakeOffTrigger"); animator.ResetTrigger("IdleTrigger"); }
     public void Idle() { animator.SetTrigger("IdleTrigger"); animator.ResetTrigger("TakeOffTrigger"); animator.ResetTrigger("IdleTrigger"); }
+
+    private void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        //Fire();
+    }
+
+    private void OnSelectExited(SelectExitEventArgs args)
+    {
+        Fire();
+    }
 }
