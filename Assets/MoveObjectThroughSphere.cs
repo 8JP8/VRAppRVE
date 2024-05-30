@@ -37,10 +37,12 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public InputActionReference AimDirR;
     public InputActionReference TriggerL;
     public InputActionReference AimDirL;
+    public InputActionReference LobbyTrigger;
     bool ShootTriggerPressedR;
     bool ShootTriggerPressingR;
     bool ShootTriggerPressedL;
     bool ShootTriggerPressingL;
+    bool TeleportToLobbyPressedR;
 
     private XRGrabInteractable grabInteractable;
 
@@ -76,10 +78,18 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         //ShootL
         ShootTriggerPressedL = (TriggerL.action.ReadValue<float>() > 0.5f) && !ShootTriggerPressingL ? true : false;
         ShootTriggerPressingL = (TriggerL.action.ReadValue<float>() > 0.5f) ? true : false;
+        //TeleportToLobbyR
+        TeleportToLobbyPressedR = (LobbyTrigger.action.ReadValue<float>() > 0.5f);
+        
 
         if (ShootTriggerPressedR || ShootTriggerPressedL)
         {
             Fire();
+        }
+
+        if (TeleportToLobbyPressedR)
+        {
+            TeleportToLobby();
         }
 
         //CheckObjectRotation();
@@ -168,6 +178,23 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         {
             Debug.LogError("Scene name doesn't contain a number.");
         }
+    }
+
+    public void TeleportToLobby()
+    {
+        // Implement teleportation logic here
+        Debug.Log("Teleporting to Lobby...");
+        
+        try
+        {
+            // Load the next scene
+            SceneManager.LoadScene("Lobby");
+        }
+        catch
+        { 
+            Debug.Log("Teleporting failed!!!"); 
+        }
+
     }
 
     void CheckObjectRotation()
