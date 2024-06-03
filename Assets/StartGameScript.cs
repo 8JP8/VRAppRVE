@@ -15,13 +15,14 @@ public class ConfigurationPicker : MonoBehaviour
     public Slider Velocity_Slider;
     public Toggle Timer_Mode_Toggle;
     public Material[] skyboxMaterials; // Assign your skybox materials in the inspector
-
+    
 
     private bool timerMode;
     private int difficultyLevel;
     private float speed;
     private int map_index;
 
+    
     public void StartButton_Click()
     {
         difficultyLevel = Difficulty_Dropdown.value;
@@ -59,7 +60,8 @@ public class ConfigurationPicker : MonoBehaviour
             }
 
             Debug.Log($"Teleporting to GameScene {index + 1}...");
-        };
+        };               
     }
+
 }
 

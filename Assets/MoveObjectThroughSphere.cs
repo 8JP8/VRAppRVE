@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.XR;
 using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
+using Unity.VisualScripting;
 
 public class RandomMovementOnSphericalSurface : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public float minAngle = 30f; // Minimum angle for upward direction (degrees)
     public float maxAngle = 150f; // Maximum angle for upward direction (degrees)
     public TextMeshProUGUI Score_Label;
+    public TextMeshProUGUI Timer_Label; //Timer label
+    private bool timer_running;
+    private float timer_time;
+    private string timer_formated;
+    
 
     private bool isLooking = false;
     private bool triggered = false;
@@ -66,6 +72,20 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         if (difficultyvalue == 0) sphereRadius = 10f;
         else if (difficultyvalue == 1) sphereRadius = 20f;
         else {sphereRadius = 25f;}
+
+        StartTimer();
+
+    }
+
+    public void StartTimer()
+    {
+        timer_time = 0;
+        timer_running = true;
+    }
+
+    public void StopTimer()
+    {
+        timer_running = false;
     }
 
     void Update()
@@ -96,6 +116,16 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
         // Move the object along the spherical path and randomly change direction
         MoveObjectOnSphericalPath();
+
+        if (timer_running)
+        {
+            timer_time += Time.deltaTime;
+            int seconds = Mathf.FloorToInt(timer_time);
+            int minutes = Mathf.FloorToInt(seconds/60);
+            int remainingseconds = seconds%60;
+            timer_formated = string.Format("{0:00}:{1:00}",minutes,remainingseconds);
+            Debug.Log("timer " + timer_formated);
+        }
     }
 
     public void Object_Hover_Entered() {isHoveringTheObject=true;}
