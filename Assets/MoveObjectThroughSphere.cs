@@ -22,8 +22,14 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public TextMeshProUGUI Timer_Label; //Timer label
     private bool timer_running;
     private float timer_time;
+    public int timer_mode = 0;
+    public int timer_countdown_time = 60;
     private string timer_formated;
-    
+    public int win_score = 10;
+    private int map_index = 0;
+    public Material[] skyboxMaterials; // Assign your skybox materials in the inspector
+
+
 
     private bool isLooking = false;
     private bool triggered = false;
@@ -54,6 +60,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
     void Start()
     {
+        map_index = PlayerPrefs.GetInt("MapIndex", 0);
+
         animator = gameObject.GetComponent<Animator>();
         grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
 
@@ -66,20 +74,22 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         // Set the initial time for the next direction change
         nextDirectionChangeTime = Time.time + Random.Range(minChangeDirectionInterval, maxChangeDirectionInterval);
 
-        movementSpeed = PlayerPrefs.GetInt("ObjectSpeed", 0) != 0 ? PlayerPrefs.GetInt("ObjectSpeed", 0) : movementSpeed;
+        movementSpeed = PlayerPrefs.GetFloat("ObjectSpeed", 0) != 0 ? PlayerPrefs.GetFloat("ObjectSpeed", 0) : movementSpeed; //Override by gameobject if the user sets the speed to 0 in the game
+        timer_mode = timer_mode == 1 ? timer_mode : PlayerPrefs.GetInt("TimerMode", 0); //Overide the timer mode by the gameobject if setted to 1
+
 
         difficultyvalue = PlayerPrefs.GetInt("Difficulty", 0);
-        if (difficultyvalue == 0) sphereRadius = 10f;
-        else if (difficultyvalue == 1) sphereRadius = 20f;
-        else {sphereRadius = 25f;}
+        if (difficultyvalue == 0) { sphereRadius = 10f; timer_countdown_time = 60; win_score = 10; }
+        else if (difficultyvalue == 1) { sphereRadius = 20f; timer_countdown_time = 30; win_score = 10; }
+        else { sphereRadius = 25f; timer_countdown_time = 20; win_score = 10; }
 
-        StartTimer();
-
+        StartTimer(); //Start the Timer
     }
 
     public void StartTimer()
     {
-        timer_time = 0;
+        if (timer_mode == 0) timer_time = 0;
+        else timer_time = timer_countdown_time;
         timer_running = true;
     }
 
@@ -119,12 +129,28 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
         if (timer_running)
         {
-            timer_time += Time.deltaTime;
+            if (timer_mode == 0) { timer_time += Time.deltaTime; }
+            else
+            {
+                timer_time -= Time.deltaTime;
+                if (timer_time < 0)
+                {
+                    if (Score < win_score) { TeleportToLobby(); return; }
+                    else
+                    {
+                        int randomnumber = map_index;
+                        while (randomnumber == map_index) { randomnumber = Random.Range(1, 9); }
+                        ChangeLevel_SameScene(randomnumber); return;
+                    }
+                }
+            }
+
             int seconds = Mathf.FloorToInt(timer_time);
-            int minutes = Mathf.FloorToInt(seconds/60);
-            int remainingseconds = seconds%60;
-            timer_formated = string.Format("{0:00}:{1:00}",minutes,remainingseconds);
-            Debug.Log("timer " + timer_formated);
+            int minutes = Mathf.FloorToInt(seconds / 60);
+            int remainingseconds = seconds % 60;
+            timer_formated = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
+            //Debug.Log("timer " + timer_formated);
+            Timer_Label.text = timer_formated;
         }
     }
 
@@ -208,6 +234,33 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         {
             Debug.LogError("Scene name doesn't contain a number.");
         }
+    }
+
+    public void ChangeLevel_SameScene(int skybox_index)
+    {
+        // Load the skybox material
+        Material skyboxMaterial = null;
+        if (skybox_index >= 0 && skybox_index < skyboxMaterials.Length)
+        {
+            skyboxMaterial = skyboxMaterials[skybox_index];
+        }
+        else
+        {
+            Debug.LogWarning($"Skybox material for index {skybox_index} not found.");
+        }
+
+        // Teleport logic here
+        SceneManager.LoadSceneAsync($"GameScene{/*skybox_index*/1}").completed += (operation) =>
+        {
+            // Apply the skybox material after the scene has finished loading
+            if (skyboxMaterial != null)
+            {
+                RenderSettings.skybox = skyboxMaterial;
+                Debug.Log($"Skybox changed to {skyboxMaterial.name}.");
+            }
+
+            Debug.Log($"Teleporting to GameScene {skybox_index + 1}...");
+        };
     }
 
     public void TeleportToLobby()

@@ -445,7 +445,19 @@ MonoBehaviour:
   minAngle: 30
   maxAngle: 150
   Score_Label: {fileID: 1497444506}
-  Timer_Label: {fileID: 0}
+  Timer_Label: {fileID: 1729888653}
+  timer_mode: 0
+  timer_countdown_time: 60
+  win_score: 10
+  skyboxMaterials:
+  - {fileID: 2100000, guid: 772ad0be85c6f6141be2871ae7e85bde, type: 2}
+  - {fileID: 2100000, guid: 42a230c08bc7e0c4eb5e1990f2f24ed8, type: 2}
+  - {fileID: 2100000, guid: b3e5e7fa8f722c84fa23970347c66241, type: 2}
+  - {fileID: 2100000, guid: 08894b629fa8dc848a7bffbe4d227ccf, type: 2}
+  - {fileID: 2100000, guid: 40035a61d8c1ef448a24ea27399adbd2, type: 2}
+  - {fileID: 2100000, guid: 8d4ebe1c1aa929d44a2fe3e8b9ca8f80, type: 2}
+  - {fileID: 2100000, guid: ffeaa81536b0f724c80ea2abc4d22dc7, type: 2}
+  - {fileID: 2100000, guid: 2bd1629c0bb162546a031f25a4ed20a4, type: 2}
   fireCooldownDuration: 1
   rotationSpeed: 1
   TriggerR: {fileID: 3279264004350380116, guid: c348712bda248c246b8c49b3db54643f,
@@ -1163,7 +1175,7 @@ PrefabInstance:
     - target: {fileID: 1984668758913251958, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 41.87
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1984668758913251958, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
@@ -1203,7 +1215,7 @@ PrefabInstance:
     - target: {fileID: 1984668759388320319, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 35.73
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1984668759388320319, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
@@ -1353,7 +1365,7 @@ PrefabInstance:
     - target: {fileID: 1984668760453204319, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 41.87
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1984668760453204319, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
@@ -1428,7 +1440,7 @@ PrefabInstance:
     - target: {fileID: 1984668760711245992, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 35.73
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1984668760711245992, guid: 65eb6b98091a5734ba9d9ca871cef69a,
         type: 3}
@@ -1917,7 +1929,7 @@ Canvas:
   m_GameObject: {fileID: 521329850}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 479922904}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -3783,7 +3795,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729888651}
   m_LocalRotation: {x: -0.35355338, y: -0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 0, y: 0, z: -3.4}
+  m_LocalPosition: {x: 0, y: 0, z: -13.4}
   m_LocalScale: {x: 0.375, y: 0.375, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
