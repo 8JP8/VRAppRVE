@@ -11,7 +11,7 @@ using Unity.VisualScripting;
 public class RandomMovementOnSphericalSurface : MonoBehaviour
 {
     public float lookThreshold = 2f; // Adjust as needed
-    public float triggertime = 1f; //Time needed to trigger the object movement
+    public float triggerTime = 1f; //Time needed to trigger the object movement
     private float sphereRadius = 25f; // Radius of the sphere
     public float movementSpeed = 10f; // Speed of movement
     public float minChangeDirectionInterval = 2f; // Minimum time between direction changes
@@ -19,14 +19,16 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public float minAngle = 30f; // Minimum angle for upward direction (degrees)
     public float maxAngle = 150f; // Maximum angle for upward direction (degrees)
     public TextMeshProUGUI Score_Label;
+    public TextMeshProUGUI WinScore_Label;
     public TextMeshProUGUI Timer_Label; //Timer label
-    private bool timer_running;
-    private float timer_time;
-    public int timer_mode = 0;
-    public int timer_countdown_time = 60;
-    private string timer_formated;
-    public int win_score = 10;
-    private int map_index = 0;
+    private bool Timer_Running;
+    private float Timer_Time;
+    public int Timer_Mode = 0;
+    public int Timer_Countdown_Time = 60;
+    private string Timer_Formatted;
+    private int Default_Win_Score = 10;
+    public int Win_Score = 10;
+    private int Map_Index = 0;
     public Material[] skyboxMaterials; // Assign your skybox materials in the inspector
 
 
@@ -34,7 +36,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     private bool isLooking = false;
     private bool triggered = false;
     private float lookTimeElapsed = 0f;
-    private float Score = 0;
+    private int Score = 0;
     private Vector3 moveDirection; // Current movement direction
     private float nextDirectionChangeTime; // Time for next direction change
     private int difficultyvalue;
@@ -60,7 +62,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
     void Start()
     {
-        map_index = PlayerPrefs.GetInt("MapIndex", 0);
+        Map_Index = PlayerPrefs.GetInt("MapIndex", 0);
 
         animator = gameObject.GetComponent<Animator>();
         grabInteractable = gameObject.GetComponent<XRGrabInteractable>();
@@ -75,27 +77,31 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         nextDirectionChangeTime = Time.time + Random.Range(minChangeDirectionInterval, maxChangeDirectionInterval);
 
         movementSpeed = PlayerPrefs.GetFloat("ObjectSpeed", 0) != 0 ? PlayerPrefs.GetFloat("ObjectSpeed", 0) : movementSpeed; //Override by gameobject if the user sets the speed to 0 in the game
-        timer_mode = timer_mode == 1 ? timer_mode : PlayerPrefs.GetInt("TimerMode", 0); //Overide the timer mode by the gameobject if setted to 1
-
+        Timer_Mode = Timer_Mode == 1 ? Timer_Mode : PlayerPrefs.GetInt("TimerMode", 0); //Overide the timer mode by the gameobject if setted to 1
+        Timer_Countdown_Time = PlayerPrefs.GetInt("CountdownTime", 0) <= 10 ? Timer_Countdown_Time : PlayerPrefs.GetInt("CountdownTime", 0); //Override by countdowntime if the value is 10 or less
+        Win_Score = PlayerPrefs.GetInt("WinScore", 0) != 0 ? PlayerPrefs.GetInt("WinScore", 0) : Win_Score;
+        //Debug.Log(PlayerPrefs.GetInt("CountdownTime", 0).ToString() + PlayerPrefs.GetInt("WinScore", 0).ToString());
 
         difficultyvalue = PlayerPrefs.GetInt("Difficulty", 0);
-        if (difficultyvalue == 0) { sphereRadius = 10f; timer_countdown_time = 60; win_score = 10; }
-        else if (difficultyvalue == 1) { sphereRadius = 20f; timer_countdown_time = 30; win_score = 10; }
-        else { sphereRadius = 25f; timer_countdown_time = 20; win_score = 10; }
+        if (difficultyvalue == 0) { sphereRadius = 10f; /*Timer_Countdown_Time = 60; Win_Score = 10; */}
+        else if (difficultyvalue == 1) { sphereRadius = 20f; /*Timer_Countdown_Time = 30; Win_Score = 10; */}
+        else { sphereRadius = 25f; /*Timer_Countdown_Time = 20; Win_Score = 10; */}
+
+        WinScore_Label.text = "Meta: " + Win_Score.ToString();
 
         StartTimer(); //Start the Timer
     }
 
     public void StartTimer()
     {
-        if (timer_mode == 0) timer_time = 0;
-        else timer_time = timer_countdown_time;
-        timer_running = true;
+        if (Timer_Mode == 0) Timer_Time = 0;
+        else Timer_Time = Timer_Countdown_Time;
+        Timer_Running = true;
     }
 
     public void StopTimer()
     {
-        timer_running = false;
+        Timer_Running = false;
     }
 
     void Update()
@@ -119,6 +125,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
         if (TeleportToLobbyPressedR)
         {
+            PlayerPrefs.SetInt("ScoreSum", PlayerPrefs.GetInt("ScoreSum", 0) + Score);
+            PlayerPrefs.SetInt("TimeSum", PlayerPrefs.GetInt("TimeSum", 0) + (int)Timer_Time);
             TeleportToLobby();
         }
 
@@ -127,30 +135,46 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         // Move the object along the spherical path and randomly change direction
         MoveObjectOnSphericalPath();
 
-        if (timer_running)
+        if (Timer_Running)
         {
-            if (timer_mode == 0) { timer_time += Time.deltaTime; }
+            if (Timer_Mode == 0)
+            {
+                Timer_Time += Time.deltaTime;
+                if (Score >= Win_Score)
+                {
+                    PlayerPrefs.SetInt("ScoreSum", PlayerPrefs.GetInt("ScoreSum", 0) + Score);
+                    PlayerPrefs.SetInt("TimeSum", PlayerPrefs.GetInt("TimeSum", 0) + (int)Timer_Time);
+
+                    int randomnumber = Map_Index;
+                    while (randomnumber == Map_Index) { randomnumber = Random.Range(1, 9); }
+                    PlayerPrefs.SetInt("WinScore", Win_Score + 1);
+                    ChangeLevel_SameScene(randomnumber); return;
+                }
+            }
             else
             {
-                timer_time -= Time.deltaTime;
-                if (timer_time < 0)
+                Timer_Time -= Time.deltaTime;
+                if (Timer_Time < 0)
                 {
-                    if (Score < win_score) { TeleportToLobby(); return; }
+                    PlayerPrefs.SetInt("ScoreSum", PlayerPrefs.GetInt("ScoreSum", 0) + Score);
+                    PlayerPrefs.SetInt("TimeSum", PlayerPrefs.GetInt("TimeSum", 0) + (int)Timer_Time);
+                    if (Score < Win_Score) { PlayerPrefs.SetInt("WinScore", Default_Win_Score); TeleportToLobby(); return; }
                     else
                     {
-                        int randomnumber = map_index;
-                        while (randomnumber == map_index) { randomnumber = Random.Range(1, 9); }
+                        int randomnumber = Map_Index;
+                        while (randomnumber == Map_Index) { randomnumber = Random.Range(1, 9); }
+                        PlayerPrefs.SetInt("WinScore", Win_Score + 1);
                         ChangeLevel_SameScene(randomnumber); return;
                     }
                 }
             }
 
-            int seconds = Mathf.FloorToInt(timer_time);
+            int seconds = Mathf.FloorToInt(Timer_Time);
             int minutes = Mathf.FloorToInt(seconds / 60);
             int remainingseconds = seconds % 60;
-            timer_formated = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
-            //Debug.Log("timer " + timer_formated);
-            Timer_Label.text = timer_formated;
+            Timer_Formatted = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
+            //Debug.Log("timer " + Timer_Formatted);
+            Timer_Label.text = Timer_Formatted;
         }
     }
 
@@ -163,7 +187,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         if (!isFireCooldown && isHoveringTheObject)
         {
             Score += 1;
-            Score_Label.text = Score.ToString();
+            Score_Label.text = "Pontos: " + Score.ToString();
             ResetObject();
         }
         // Start cooldown
@@ -259,7 +283,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
                 Debug.Log($"Skybox changed to {skyboxMaterial.name}.");
             }
 
-            Debug.Log($"Teleporting to GameScene {skybox_index + 1}...");
+            Debug.Log($"GameScene{/*skybox_index + */1} Loaded...");
         };
     }
 
@@ -331,7 +355,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         if (isLooking)
         {
             lookTimeElapsed += Time.deltaTime;
-            if (lookTimeElapsed >= triggertime)
+            if (lookTimeElapsed >= triggerTime)
             {
                 triggered = true;
                 StartFlight();
