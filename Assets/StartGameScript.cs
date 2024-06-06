@@ -28,6 +28,7 @@ public class ConfigurationPicker : MonoBehaviour
     private int countdown_time;
     private int scoreSum = 0;
     private int timeSum = 0;
+    private string TimeSum_Formatted = "";
 
     void Start()
     {
@@ -42,11 +43,10 @@ public class ConfigurationPicker : MonoBehaviour
             int seconds = Mathf.FloorToInt(timeSum);
             int minutes = Mathf.FloorToInt(seconds / 60);
             int remainingseconds = seconds % 60;
-            GameOver_TotalTime.text = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
+            TimeSum_Formatted = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
+            GameOver_TotalTime.text = TimeSum_Formatted;
             GameOverPanel.SetActive(true);
         }
-
-        //Criar Ficheiro Com os detalhes e highscore
     }
 
     public void StartButton_Click()
@@ -92,6 +92,5 @@ public class ConfigurationPicker : MonoBehaviour
             Debug.Log($"GameScene{/*index + */1} Loaded...");
         };               
     }
-
 }
 
