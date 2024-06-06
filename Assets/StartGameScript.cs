@@ -37,7 +37,6 @@ public class ConfigurationPicker : MonoBehaviour
         {
             scoreSum = PlayerPrefs.GetInt("ScoreSum", 0); //Score Sum of the Session
             timeSum = PlayerPrefs.GetInt("TimeSum", 0); //Time Sum of the Session
-            PlayerPrefs.SetInt("ScoreSum", 0); PlayerPrefs.SetInt("TimeSum", 0);
 
             GameOver_Score.text = scoreSum.ToString();
             int seconds = Mathf.FloorToInt(timeSum);

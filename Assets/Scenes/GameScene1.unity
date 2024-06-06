@@ -437,10 +437,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c970fd3d8c8d844986e6a12706157d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookThreshold: 300
+  lookThreshold: 30
   triggerTime: 1
   movementSpeed: 50
-  minChangeDirectionInterval: 0
+  minChangeDirectionInterval: 2
   maxChangeDirectionInterval: 5
   minAngle: 30
   maxAngle: 150
@@ -8142,7 +8142,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 45, y: -25, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -29.100006, y: 0}
+  m_AnchoredPosition: {x: -29.099976, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1252618208

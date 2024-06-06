@@ -17,22 +17,27 @@ public class ScoreFileManager : MonoBehaviour
     [System.Serializable]
     public class PlayerData
     {
-        public string playerName;
-        public int saveNumber;
-        public string gameTime;
+        public string PlayerName;
+        public int HighScore;
+        public string HighScoreTime;
+        public int LastScore;
+        public string LastScoreTime;
 
-        public PlayerData(string playerName, int saveNumber, string gameTime)
+        public PlayerData(string playerName, int score, string time)
         {
-            this.playerName = playerName;
-            this.saveNumber = saveNumber;
-            this.gameTime = gameTime;
+            PlayerName = playerName;
+            HighScore = score;
+            HighScoreTime = time;
+            LastScore = score;
+            LastScoreTime = time;
         }
     }
 
     public void SaveData()
     {
-        scoreSum = PlayerPrefs.GetInt("ScoreSum", 0); //Score Sum of the Session
-        timeSum = PlayerPrefs.GetInt("TimeSum", 0); //Time Sum of the Session
+        scoreSum = PlayerPrefs.GetInt("ScoreSum", 0); // Score Sum of the Session
+        timeSum = PlayerPrefs.GetInt("TimeSum", 0); // Time Sum of the Session
+        PlayerPrefs.SetInt("ScoreSum", 0); PlayerPrefs.SetInt("TimeSum", 0);
 
         int seconds = Mathf.FloorToInt(timeSum);
         int minutes = Mathf.FloorToInt(seconds / 60);
@@ -48,12 +53,40 @@ public class ScoreFileManager : MonoBehaviour
             return;
         }
 
-        PlayerData playerData = new PlayerData(playerName, scoreSum, TimeSum_Formatted);
-        string json = JsonUtility.ToJson(playerData, true);
+        string path = Path.Combine(Application.persistentDataPath, "PlayerScores.json");
+        Dictionary<string, PlayerData> playerScores = new Dictionary<string, PlayerData>();
 
-        string path = Path.Combine(Application.persistentDataPath, playerName + "_save.json");
+        // Load existing data if file exists
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            playerScores = JsonUtility.FromJson<Serialization<PlayerData>>(json).ToDictionary();
+        }
 
-        File.WriteAllText(path, json);
+        PlayerData playerData;
+        if (playerScores.TryGetValue(playerName, out playerData))
+        {
+            // Update last score and time
+            playerData.LastScore = scoreSum;
+            playerData.LastScoreTime = TimeSum_Formatted;
+
+            // Update high score and time if the new score is higher
+            if (scoreSum > playerData.HighScore)
+            {
+                playerData.HighScore = scoreSum;
+                playerData.HighScoreTime = TimeSum_Formatted;
+            }
+        }
+        else
+        {
+            // Create new player data if player doesn't exist
+            playerData = new PlayerData(playerName, scoreSum, TimeSum_Formatted);
+            playerScores[playerName] = playerData;
+        }
+
+        // Serialize and save updated data
+        string updatedJson = JsonUtility.ToJson(new Serialization<PlayerData>(playerScores), true);
+        File.WriteAllText(path, updatedJson);
 
         Debug.Log("Data saved to " + path);
 
@@ -61,6 +94,28 @@ public class ScoreFileManager : MonoBehaviour
         saveNumber++;
     }
 
+    [System.Serializable]
+    public class Serialization<T>
+    {
+        public List<string> keys;
+        public List<T> values;
+
+        public Serialization(Dictionary<string, T> dictionary)
+        {
+            keys = new List<string>(dictionary.Keys);
+            values = new List<T>(dictionary.Values);
+        }
+
+        public Dictionary<string, T> ToDictionary()
+        {
+            Dictionary<string, T> dict = new Dictionary<string, T>();
+            for (int i = 0; i < keys.Count; i++)
+            {
+                dict[keys[i]] = values[i];
+            }
+            return dict;
+        }
+    }
 
     // Update is called once per frame
     void Update()
