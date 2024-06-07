@@ -46,6 +46,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     public float fireCooldownDuration = 1f; // Cooldown duration for firing (in seconds)
     public float rotationSpeed = 1f;
     Animator animator;
+    public new ParticleSystem particleSystem;
 
     public InputActionReference TriggerR;
     public InputActionReference AimDirR;
@@ -186,6 +187,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         // If not in cooldown, register hit and start cooldown
         if (!isFireCooldown && isHoveringTheObject)
         {
+            particleSystem.transform.position = transform.position;
+            particleSystem.Play(); //Show Crow Exploding Animation
             Score += 1;
             Score_Label.text = "Pontos: " + Score.ToString();
             ResetObject();
