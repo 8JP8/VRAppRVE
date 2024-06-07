@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -117,9 +115,50 @@ public class ScoreFileManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public static List<string> GetSortedPlayerScores()
     {
-        
+        string path = Path.Combine(Application.persistentDataPath, "PlayerScores.json");
+        Dictionary<string, PlayerData> playerScores = new Dictionary<string, PlayerData>();
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            playerScores = JsonUtility.FromJson<Serialization<PlayerData>>(json).ToDictionary();
+        }
+        else
+        {
+            Debug.LogWarning("No player scores file found!");
+            return null;
+        }
+
+        List<PlayerData> sortedPlayerData = new List<PlayerData>(playerScores.Values);
+        sortedPlayerData.Sort((p1, p2) => p2.HighScore.CompareTo(p1.HighScore));
+
+        List<string> formattedScores = new List<string>();
+        foreach (PlayerData player in sortedPlayerData)
+        {
+            formattedScores.Add($"{player.PlayerName} - {player.HighScore} ({player.HighScoreTime})");
+        }
+
+        return formattedScores;
+    }
+
+    public static void DisplaySortedPlayerScores(Transform PlayerListUI)
+    {
+        List<string> sortedPlayerScores = GetSortedPlayerScores();
+        if (sortedPlayerScores == null) return;
+
+        foreach (Transform child in PlayerListUI)
+        {
+            Destroy(child.gameObject); // Clear existing list
+        }
+
+        foreach (string playerInfo in sortedPlayerScores)
+        {
+            GameObject textObject = new GameObject("PlayerScore");
+            TextMeshProUGUI textMeshPro = textObject.AddComponent<TextMeshProUGUI>();
+            textMeshPro.text = playerInfo;
+            textObject.transform.SetParent(PlayerListUI, false);
+        }
     }
 }

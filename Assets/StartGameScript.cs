@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using static ScoreFileManager;
 
 public class ConfigurationPicker : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class ConfigurationPicker : MonoBehaviour
     public TextMeshProUGUI GameOver_Score;
     public TextMeshProUGUI GameOver_TotalTime;
     public GameObject GameOverPanel;
+    public Transform Score_Table;
 
 
     private bool timerMode;
@@ -32,6 +34,7 @@ public class ConfigurationPicker : MonoBehaviour
 
     void Start()
     {
+        DisplaySortedPlayerScores(Score_Table);
         //Game Over Handling
         if ((PlayerPrefs.GetInt("ScoreSum", 0) != 0) && (PlayerPrefs.GetInt("TimeSum", 0) != 0))
         {
