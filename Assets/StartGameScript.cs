@@ -19,6 +19,7 @@ public class ConfigurationPicker : MonoBehaviour
     public Material[] skyboxMaterials; // Assign your skybox materials in the inspector
     public TextMeshProUGUI GameOver_Score;
     public TextMeshProUGUI GameOver_TotalTime;
+    public TextMeshProUGUI HighScore_Value_Label;
     public GameObject GameOverPanel;
     public Transform Score_Table;
 
@@ -34,7 +35,7 @@ public class ConfigurationPicker : MonoBehaviour
 
     void Start()
     {
-        DisplaySortedPlayerScores(Score_Table);
+        DisplaySortedPlayerScores(Score_Table, HighScore_Value_Label);
         //Game Over Handling
         if ((PlayerPrefs.GetInt("ScoreSum", 0) != 0) && (PlayerPrefs.GetInt("TimeSum", 0) != 0))
         {

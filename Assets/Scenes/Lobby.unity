@@ -5776,6 +5776,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 2bd1629c0bb162546a031f25a4ed20a4, type: 2}
   GameOver_Score: {fileID: 630848261}
   GameOver_TotalTime: {fileID: 1175495975}
+  HighScore_Value_Label: {fileID: 594350745}
   GameOverPanel: {fileID: 1795519385}
   Score_Table: {fileID: 2028439779}
 --- !u!1 &419629167
@@ -10660,7 +10661,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.00003270967, y: -180.50002}
+  m_AnchoredPosition: {x: 0.00003270967, y: -188.3}
   m_SizeDelta: {x: 302, y: 68}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &660131904
@@ -24171,7 +24172,7 @@ MonoBehaviour:
   m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 5
+  m_CharacterLimit: 8
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -33464,7 +33465,7 @@ MonoBehaviour:
     m_Top: 14
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 10
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1

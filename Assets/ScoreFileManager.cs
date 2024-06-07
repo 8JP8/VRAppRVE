@@ -137,13 +137,13 @@ public class ScoreFileManager : MonoBehaviour
         List<string> formattedScores = new List<string>();
         foreach (PlayerData player in sortedPlayerData)
         {
-            formattedScores.Add($"{player.PlayerName} - {player.HighScore} ({player.HighScoreTime})");
+            formattedScores.Add($"{player.PlayerName} - {player.HighScore} [{player.HighScoreTime}]");
         }
 
         return formattedScores;
     }
 
-    public static void DisplaySortedPlayerScores(Transform PlayerListUI)
+    public static void DisplaySortedPlayerScores(Transform PlayerListUI, TextMeshProUGUI HighScoreLabel)
     {
         List<string> sortedPlayerScores = GetSortedPlayerScores();
         if (sortedPlayerScores == null) return;
@@ -153,11 +153,19 @@ public class ScoreFileManager : MonoBehaviour
             Destroy(child.gameObject); // Clear existing list
         }
 
+        string[] highscore = sortedPlayerScores[0].Split('-');
+
+        HighScoreLabel.text = $"{highscore[1].Substring(0, highscore[1].IndexOf(" ["))} - {highscore[0]}";
+
         foreach (string playerInfo in sortedPlayerScores)
         {
             GameObject textObject = new GameObject("PlayerScore");
             TextMeshProUGUI textMeshPro = textObject.AddComponent<TextMeshProUGUI>();
             textMeshPro.text = playerInfo;
+            textMeshPro.rectTransform.sizeDelta = new Vector2(400, 25); // Set the size of the label element
+            textMeshPro.enableAutoSizing = true;
+            textMeshPro.fontSizeMax = 18; // Maximum font size
+            textMeshPro.alignment = TextAlignmentOptions.Center; // Center text horizontally and vertically
             textObject.transform.SetParent(PlayerListUI, false);
         }
     }
