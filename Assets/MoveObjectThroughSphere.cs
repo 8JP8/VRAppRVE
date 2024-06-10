@@ -42,6 +42,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
     private int difficultyvalue;
     private bool isFireCooldown = false;
     private bool isHoveringTheObject = false;
+    private bool isHoveringTheLobbyTeleport = false;
     private bool isResetting = false;
     public float fireCooldownDuration = 1f; // Cooldown duration for firing (in seconds)
     public float rotationSpeed = 1f;
@@ -124,7 +125,9 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
             Fire();
         }
 
-        if (TeleportToLobbyPressedR)
+
+
+        if (TeleportToLobbyPressedR || (isHoveringTheLobbyTeleport && (ShootTriggerPressedR || ShootTriggerPressedL)))
         {
             PlayerPrefs.SetInt("ScoreSum", PlayerPrefs.GetInt("ScoreSum", 0) + Score);
             PlayerPrefs.SetInt("TimeSum", PlayerPrefs.GetInt("TimeSum", 0) + (int)Timer_Time);
@@ -181,6 +184,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
     public void Object_Hover_Entered() {isHoveringTheObject=true;}
     public void Object_Hover_Exited() {isHoveringTheObject=false;}
+    public void TeleportSphere_Hover_Entered() { isHoveringTheLobbyTeleport = true; }
+    public void TeleportSphere_Hover_Exited() { isHoveringTheLobbyTeleport = false; }
 
     public void Fire()
     {

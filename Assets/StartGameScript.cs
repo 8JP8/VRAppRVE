@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using static ScoreFileManager;
+using System.Reflection;
 
 public class ConfigurationPicker : MonoBehaviour
 {
@@ -22,7 +23,10 @@ public class ConfigurationPicker : MonoBehaviour
     public TextMeshProUGUI HighScore_Value_Label;
     public GameObject GameOverPanel;
     public Transform Score_Table;
-
+    public TMP_Dropdown CustomMap_DropDown;
+    public string customMapDirectoryPath = "/Scenes/360 Images/Custom/";
+    List<string> customMapImageFileNames = new List<string>();
+    public Image customMapPreview;
 
     private bool timerMode;
     private int difficultyLevel;
@@ -32,10 +36,12 @@ public class ConfigurationPicker : MonoBehaviour
     private int scoreSum = 0;
     private int timeSum = 0;
     private string TimeSum_Formatted = "";
+    private bool customMap = false;
 
     void Start()
     {
         DisplaySortedPlayerScores(Score_Table, HighScore_Value_Label);
+        PlayerPrefs.SetInt("MapIndex", 0);
         //Game Over Handling
         if ((PlayerPrefs.GetInt("ScoreSum", 0) != 0) && (PlayerPrefs.GetInt("TimeSum", 0) != 0))
         {
@@ -49,6 +55,7 @@ public class ConfigurationPicker : MonoBehaviour
             TimeSum_Formatted = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
             GameOver_TotalTime.text = TimeSum_Formatted;
             GameOverPanel.SetActive(true);
+            CustomMapSelectorUpdate();
         }
     }
 
@@ -68,22 +75,37 @@ public class ConfigurationPicker : MonoBehaviour
         map_index = PlayerPrefs.GetInt("MapIndex", 0);
         if (difficultyLevel == 1) PlayerPrefs.SetInt("WinScore", 3); else if (difficultyLevel == 2) PlayerPrefs.SetInt("WinScore", 5); else PlayerPrefs.SetInt("WinScore", 2); //Set Initial WinScore
         TeleportToGameScene(map_index);
-        Debug.Log($"{speed} {timerMode} {difficultyLevel} {countdown_time}");
+        //Debug.Log($"{speed} {timerMode} {difficultyLevel} {countdown_time}");
     }
 
     public void TeleportToGameScene(int index)
     {
         // Load the skybox material
         Material skyboxMaterial = null;
-        if (index >= 0 && index < skyboxMaterials.Length)
+        if (customMap)
         {
-            skyboxMaterial = skyboxMaterials[index];
+            string filepath = "";
+            try { filepath = Path.Join(Application.dataPath + customMapDirectoryPath, customMapImageFileNames[CustomMap_DropDown.value], ".png").Replace("\\", ""); } catch { }
+            // Load the stitched texture
+            Texture2D texture = new Texture2D(4096, 2048);
+            texture.LoadImage(File.ReadAllBytes(filepath));
+            // Create a skybox material for the 360 image
+            skyboxMaterial = new Material(Shader.Find("Skybox/Panoramic"));
+            skyboxMaterial.SetTexture("_MainTex", texture);
+            skyboxMaterial.SetFloat("_Exposure", 1.0f);
+            skyboxMaterial.SetFloat("_Rotation", 0);
         }
         else
-        {
-            Debug.LogWarning($"Skybox material for index {index} not found.");
+            { 
+            if (index >= 0 && index < skyboxMaterials.Length)
+            {
+                skyboxMaterial = skyboxMaterials[index];
+            }
+            else
+            {
+                Debug.LogWarning($"Skybox material for index {index} not found.");
+            }
         }
-
         // Teleport logic here
         SceneManager.LoadSceneAsync($"GameScene{/*index*/1}").completed += (operation) =>
         {
@@ -96,6 +118,73 @@ public class ConfigurationPicker : MonoBehaviour
 
             Debug.Log($"GameScene{/*index + */1} Loaded...");
         };               
+    }
+
+    public void CustomMapSelectorPreviewUpdate()
+    {
+        string filepath = "";
+        try { filepath = Path.Join(Application.dataPath+customMapDirectoryPath, customMapImageFileNames[CustomMap_DropDown.value], ".png").Replace("\\", ""); } catch {}
+        // Check if the file exists
+        if (File.Exists(filepath))
+        {
+            // Read the bytes from the file
+            byte[] fileData = File.ReadAllBytes(filepath);
+
+            // Create a new Texture2D
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(fileData); // Load the image data into the texture
+
+            // Assign the texture to the RawImage
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
+            customMapPreview.sprite = sprite;
+        }
+        else
+        {
+            Debug.LogError("File not found: " + filepath);
+        }
+    }
+
+    public void CustomMapSelectorUpdate()
+    {
+        // Clear existing options
+        CustomMap_DropDown.ClearOptions();
+
+        // Get image file names without extension from the specified directory
+        customMapImageFileNames = GetImageFileNames();
+
+        // Add each image file name to the dropdown options
+        CustomMap_DropDown.AddOptions(customMapImageFileNames);
+
+        CustomMapSelectorPreviewUpdate();
+    }
+
+    public void CustomMap(bool slider)
+    { 
+        if (slider) { customMap = true; } else { customMap = false; }
+    }
+
+    List<string> GetImageFileNames()
+    {
+        List<string> fileNames = new List<string>();
+
+        // Check if the directory exists
+        if (Directory.Exists(Application.dataPath + customMapDirectoryPath))
+        {
+            // Get all image files in the directory
+            string[] files = Directory.GetFiles(Application.dataPath + customMapDirectoryPath, "*.png");
+
+            foreach (string file in files)
+            {
+                // Get just the file name without extension
+                string fileName = Path.GetFileNameWithoutExtension(file);
+                fileNames.Add(fileName);
+            }
+        }
+        else
+        {
+            Debug.LogError("Directory not found: " + customMapDirectoryPath);
+        }
+        return fileNames;
     }
 }
 
