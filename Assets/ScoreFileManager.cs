@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -127,7 +128,10 @@ public class ScoreFileManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("No player scores file found!");
+            // Create the file with an empty dictionary if it doesn't exist
+            string emptyJson = JsonUtility.ToJson(new Serialization<PlayerData>(playerScores), true);
+            File.WriteAllText(path, emptyJson);
+            Debug.LogWarning("No player scores file found! Creating an empty file.");
             return null;
         }
 

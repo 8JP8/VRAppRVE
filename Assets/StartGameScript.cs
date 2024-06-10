@@ -52,6 +52,8 @@ public class ConfigurationPicker : MonoBehaviour
         }
     }
 
+    public void UpdateScoreBoard() { DisplaySortedPlayerScores(Score_Table, HighScore_Value_Label); }
+
     public void StartButton_Click()
     {
         PlayerPrefs.SetInt("ScoreSum", 0); PlayerPrefs.SetInt("TimeSum", 0);
