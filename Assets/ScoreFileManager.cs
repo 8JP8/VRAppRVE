@@ -93,6 +93,19 @@ public class ScoreFileManager : MonoBehaviour
         saveNumber++;
     }
 
+    public void RandomNameGen()
+    {
+        System.Random random = new System.Random();
+        char[] letters = new char[5];
+
+        for (int i = 0; i < letters.Length; i++)
+        {
+            letters[i] = (char)random.Next('A', 'Z' + 1);
+        }
+        Debug.Log("#" + new string(letters));
+        PlayerName_Input.text = "#" + new string(letters);
+    }
+
     [System.Serializable]
     public class Serialization<T>
     {

@@ -129,8 +129,7 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
 
         if (TeleportToLobbyPressedR || (isHoveringTheLobbyTeleport && (ShootTriggerPressedR || ShootTriggerPressedL)))
         {
-            PlayerPrefs.SetInt("ScoreSum", PlayerPrefs.GetInt("ScoreSum", 0) + Score);
-            PlayerPrefs.SetInt("TimeSum", PlayerPrefs.GetInt("TimeSum", 0) + (int)Timer_Time);
+            SaveScores();
             TeleportToLobby();
         }
 
@@ -152,7 +151,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
                     int randomnumber = Map_Index;
                     while (randomnumber == Map_Index) { randomnumber = Random.Range(1, 9); }
                     PlayerPrefs.SetInt("WinScore", Win_Score + 1);
-                    ChangeLevel_SameScene(randomnumber); return;
+                    ChangeLevel_SameScene(randomnumber);
+                    PlayerPrefs.SetInt("MapIndex", randomnumber); return;
                 }
             }
             else
@@ -168,7 +168,8 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
                         int randomnumber = Map_Index;
                         while (randomnumber == Map_Index) { randomnumber = Random.Range(1, 9); }
                         PlayerPrefs.SetInt("WinScore", Win_Score + 1);
-                        ChangeLevel_SameScene(randomnumber); return;
+                        ChangeLevel_SameScene(randomnumber); 
+                        PlayerPrefs.SetInt("MapIndex", randomnumber); return;
                     }
                 }
             }
@@ -180,6 +181,12 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
             //Debug.Log("timer " + Timer_Formatted);
             Timer_Label.text = Timer_Formatted;
         }
+    }
+
+    public void SaveScores()
+    {
+        PlayerPrefs.SetInt("ScoreSum", PlayerPrefs.GetInt("ScoreSum", 0) + Score);
+        PlayerPrefs.SetInt("TimeSum", PlayerPrefs.GetInt("TimeSum", 0) + (int)Timer_Time);
     }
 
     public void Object_Hover_Entered() {isHoveringTheObject=true;}

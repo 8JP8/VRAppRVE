@@ -1,17 +1,17 @@
 # ninja log v5
-11	712	7398071655856208	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	212cb904097cf405
-22	575	7398071654480898	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	421fd1584b847b27
-26	601	7398071654753674	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ad34d190eff2538
-16	570	7398071654457415	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	1a6b5add1d31781e
-851	966	7398071658188384	C:/Users/JP/OneDrive - Universidade de Aveiro/RVE/VRAppRVE/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6d452d3m/obj/arm64-v8a/libgame.so	9a36b2c521964638
-32	713	7398071655816080	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	e620a0a15e40ad87
-6	796	7398071656723882	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	6979c78385100194
-2	851	7398071657148447	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8439e194675a8949
-67	1533	7398115616103436	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ad34d190eff2538
-15	1601	7398115616578580	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	1a6b5add1d31781e
 79	1712	7398115617848056	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	421fd1584b847b27
 22	1915	7398115618751043	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	212cb904097cf405
+67	1533	7398115616103436	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ad34d190eff2538
+15	1601	7398115616578580	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	1a6b5add1d31781e
 48	1922	7398115618555901	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	e620a0a15e40ad87
+2277	2846	7398115628370370	C:/Users/JP/OneDrive - Universidade de Aveiro/RVE/VRAppRVE/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6d452d3m/obj/arm64-v8a/libgame.so	9a36b2c521964638
 30	2069	7398115621534887	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	6979c78385100194
 4	2277	7398115623278657	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8439e194675a8949
-2277	2846	7398115628370370	C:/Users/JP/OneDrive - Universidade de Aveiro/RVE/VRAppRVE/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6d452d3m/obj/arm64-v8a/libgame.so	9a36b2c521964638
+28	835	7398262757151126	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ad34d190eff2538
+24	884	7398262757536552	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	421fd1584b847b27
+19	931	7398262758042926	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	1a6b5add1d31781e
+32	952	7398262758260900	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	e620a0a15e40ad87
+14	980	7398262758593344	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	212cb904097cf405
+8	1079	7398262759593051	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	6979c78385100194
+3	1133	7398262760048780	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	8439e194675a8949
+1134	1382	7398262762238418	C:/Users/JP/OneDrive - Universidade de Aveiro/RVE/VRAppRVE/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6d452d3m/obj/arm64-v8a/libgame.so	9a36b2c521964638

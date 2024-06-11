@@ -24,7 +24,7 @@ public class ConfigurationPicker : MonoBehaviour
     public GameObject GameOverPanel;
     public Transform Score_Table;
     public TMP_Dropdown CustomMap_DropDown;
-    public string customMapDirectoryPath = "/CustomMaps/";
+    private string customMapDirectoryPath = "CustomMaps";
     List<string> customMapImageFileNames = new List<string>();
     public Image customMapPreview;
 
@@ -40,6 +40,8 @@ public class ConfigurationPicker : MonoBehaviour
 
     void Start()
     {
+        string directoryPath = Path.Join(Application.persistentDataPath, customMapDirectoryPath);
+        if (!Directory.Exists(directoryPath)) { Directory.CreateDirectory(directoryPath);}
         DisplaySortedPlayerScores(Score_Table, HighScore_Value_Label);
         PlayerPrefs.SetInt("MapIndex", 0);
         CustomMapSelectorUpdate();
@@ -58,6 +60,7 @@ public class ConfigurationPicker : MonoBehaviour
             GameOverPanel.SetActive(true);
         }
     }
+
 
     public void UpdateScoreBoard() { DisplaySortedPlayerScores(Score_Table, HighScore_Value_Label); }
 
@@ -78,14 +81,19 @@ public class ConfigurationPicker : MonoBehaviour
         //Debug.Log($"{speed} {timerMode} {difficultyLevel} {countdown_time}");
     }
 
+    public void OpenKeyboard()
+    {
+        TouchScreenKeyboard.Open("");
+    }
+
     public void TeleportToGameScene(int index)
     {
         // Load the skybox material
         Material skyboxMaterial = null;
         if (customMap)
         {
-            string filepath = "";
-            try { filepath = Path.Join(Application.dataPath + customMapDirectoryPath, customMapImageFileNames[CustomMap_DropDown.value], ".png").Replace("\\", ""); } catch { }
+            string filepath = Path.Join(Application.persistentDataPath, customMapDirectoryPath);
+            try { filepath = Path.Join(filepath, customMapImageFileNames[CustomMap_DropDown.value] + ".png"); } catch { }
             // Load the stitched texture
             Texture2D texture = new Texture2D(4096, 2048);
             texture.LoadImage(File.ReadAllBytes(filepath));
@@ -96,7 +104,7 @@ public class ConfigurationPicker : MonoBehaviour
             skyboxMaterial.SetFloat("_Rotation", 0);
         }
         else
-            { 
+        {
             if (index >= 0 && index < skyboxMaterials.Length)
             {
                 skyboxMaterial = skyboxMaterials[index];
@@ -117,13 +125,13 @@ public class ConfigurationPicker : MonoBehaviour
             }
 
             Debug.Log($"GameScene{/*index + */1} Loaded...");
-        };               
+        };
     }
 
     public void CustomMapSelectorPreviewUpdate()
     {
         string filepath = "";
-        try { filepath = Path.Join(Application.dataPath+customMapDirectoryPath, customMapImageFileNames[CustomMap_DropDown.value], ".png").Replace("\\", ""); } catch {}
+        try { filepath = Path.Join(Application.persistentDataPath, customMapDirectoryPath, customMapImageFileNames[CustomMap_DropDown.value]+".png"); } catch { }
         // Check if the file exists
         if (File.Exists(filepath))
         {
@@ -159,7 +167,7 @@ public class ConfigurationPicker : MonoBehaviour
     }
 
     public void CustomMap(bool slider)
-    { 
+    {
         if (slider) { customMap = true; } else { customMap = false; }
     }
 
@@ -168,10 +176,10 @@ public class ConfigurationPicker : MonoBehaviour
         List<string> fileNames = new List<string>();
 
         // Check if the directory exists
-        if (Directory.Exists(Application.dataPath + customMapDirectoryPath))
+        if (Directory.Exists(Path.Join(Application.persistentDataPath, customMapDirectoryPath)))
         {
             // Get all image files in the directory
-            string[] files = Directory.GetFiles(Application.dataPath + customMapDirectoryPath, "*.png");
+            string[] files = Directory.GetFiles(Path.Join(Application.persistentDataPath, customMapDirectoryPath), "*.png");
 
             foreach (string file in files)
             {
@@ -182,9 +190,8 @@ public class ConfigurationPicker : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Directory not found: " + customMapDirectoryPath);
+            Debug.LogError("Directory not found: " + Path.Join(Application.persistentDataPath, customMapDirectoryPath));
         }
         return fileNames;
     }
 }
-
