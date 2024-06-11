@@ -42,6 +42,7 @@ public class ConfigurationPicker : MonoBehaviour
     {
         DisplaySortedPlayerScores(Score_Table, HighScore_Value_Label);
         PlayerPrefs.SetInt("MapIndex", 0);
+        CustomMapSelectorUpdate();
         //Game Over Handling
         if ((PlayerPrefs.GetInt("ScoreSum", 0) != 0) && (PlayerPrefs.GetInt("TimeSum", 0) != 0))
         {
@@ -55,7 +56,6 @@ public class ConfigurationPicker : MonoBehaviour
             TimeSum_Formatted = string.Format("{0:0}:{1:00}", minutes, remainingseconds);
             GameOver_TotalTime.text = TimeSum_Formatted;
             GameOverPanel.SetActive(true);
-            CustomMapSelectorUpdate();
         }
     }
 
