@@ -24,7 +24,7 @@ public class ConfigurationPicker : MonoBehaviour
     public GameObject GameOverPanel;
     public Transform Score_Table;
     public TMP_Dropdown CustomMap_DropDown;
-    public string customMapDirectoryPath = "/Scenes/360 Images/Custom/";
+    public string customMapDirectoryPath = "/CustomMaps/";
     List<string> customMapImageFileNames = new List<string>();
     public Image customMapPreview;
 
