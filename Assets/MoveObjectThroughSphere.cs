@@ -85,9 +85,9 @@ public class RandomMovementOnSphericalSurface : MonoBehaviour
         //Debug.Log(PlayerPrefs.GetInt("CountdownTime", 0).ToString() + PlayerPrefs.GetInt("WinScore", 0).ToString());
 
         difficultyvalue = PlayerPrefs.GetInt("Difficulty", 0);
-        if (difficultyvalue == 0) { sphereRadius = 10f; /*Timer_Countdown_Time = 60; Win_Score = 10; */}
-        else if (difficultyvalue == 1) { sphereRadius = 20f; /*Timer_Countdown_Time = 30; Win_Score = 10; */}
-        else { sphereRadius = 25f; /*Timer_Countdown_Time = 20; Win_Score = 10; */}
+        if (difficultyvalue == 0) { sphereRadius = 10f; maxChangeDirectionInterval = 5; /*Timer_Countdown_Time = 60; Win_Score = 10; */}
+        else if (difficultyvalue == 1) { sphereRadius = 20f; maxChangeDirectionInterval = 3; /*Timer_Countdown_Time = 30; Win_Score = 10; */}
+        else { sphereRadius = 25f; maxChangeDirectionInterval = 2; /*Timer_Countdown_Time = 20; Win_Score = 10; */}
 
         WinScore_Label.text = "Meta: " + Win_Score.ToString();
 
